@@ -1,0 +1,10 @@
+.\lrwan_ns1\hts221_driver_hl.o: ../../../../../../../Drivers/BSP/Components/hts221/HTS221_Driver_HL.c
+.\lrwan_ns1\hts221_driver_hl.o: ../../../../../../../Drivers/BSP/Components/hts221/HTS221_Driver_HL.h
+.\lrwan_ns1\hts221_driver_hl.o: ../../../../../../../Drivers/BSP/Components/Common/humidity.h
+.\lrwan_ns1\hts221_driver_hl.o: ../../../../../../../Drivers/BSP/Components/Common/sensor.h
+.\lrwan_ns1\hts221_driver_hl.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+.\lrwan_ns1\hts221_driver_hl.o: ../../../../../../../Drivers/BSP/Components/Common/component.h
+.\lrwan_ns1\hts221_driver_hl.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\lrwan_ns1\hts221_driver_hl.o: ../../../../../../../Drivers/BSP/Components/Common/temperature.h
+.\lrwan_ns1\hts221_driver_hl.o: ../../../../../../../Drivers/BSP/Components/hts221/HTS221_Driver.h
+.\lrwan_ns1\hts221_driver_hl.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
