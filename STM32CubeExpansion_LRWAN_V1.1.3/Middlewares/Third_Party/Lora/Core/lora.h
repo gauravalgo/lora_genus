@@ -86,7 +86,7 @@ Maintainer: Miguel Luis, Gregory Cristian and Wael Guibene
 typedef struct
 {
   /*point to the LoRa App data buffer*/
-  uint8_t* Buff;
+  uint8_t Buff[255];
   /*LoRa App data buffer size*/
   uint8_t BuffSize;
   /*Port on which the LoRa App is data is sent/ received*/

@@ -197,7 +197,7 @@ static void McpsIndication( McpsIndication_t *mcpsIndication )
 //DBG_PRINTF( "\n\r*** mcpsIndication->RxData %d **\n\r",mcpsIndication->RxData );
     if( mcpsIndication->RxData == true )
     {
-      DBG_PRINTF( "\n\r*** mcpsIndication->RxData %d **\n\r",mcpsIndication->RxData );
+ //     DBG_PRINTF( "\n\r*** mcpsIndication->RxData %d **\n\r",mcpsIndication->RxData );
 			switch( mcpsIndication->Port )
       {
         case CERTIF_PORT:
@@ -268,7 +268,7 @@ void LORA_Init (LoRaMainCallback_t *callbacks, LoRaParam_t* LoRaParam )
   
   /* init the main call backs*/
   LoRaMainCallbacks = callbacks;
-  
+
 #if (STATIC_DEVICE_EUI != 1)
   LoRaMainCallbacks->BoardGetUniqueId( DevEui );  
 #endif

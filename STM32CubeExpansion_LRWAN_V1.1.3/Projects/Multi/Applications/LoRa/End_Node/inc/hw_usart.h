@@ -57,7 +57,7 @@
 #include "low_power_manager.h"
 
 
-extern UART_HandleTypeDef huart2;
+//extern UART_HandleTypeDef huart2;
 
 /* Private defines -----------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/

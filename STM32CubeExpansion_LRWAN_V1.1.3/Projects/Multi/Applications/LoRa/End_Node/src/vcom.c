@@ -67,7 +67,11 @@ UART_HandleTypeDef UartHandle;
 
 /* Private function prototypes -----------------------------------------------*/
 /* Functions Definition ------------------------------------------------------*/
-
+void 	Transmit(uint8_t * pointer)
+{
+	
+HAL_UART_Transmit_IT(&UartHandle, (uint8_t *)pointer, 1);
+}
 void vcom_Init(void)
 {
   /*## Configure the UART peripheral ######################################*/
@@ -80,7 +84,7 @@ void vcom_Init(void)
       - Hardware flow control disabled (RTS and CTS signals) */
   UartHandle.Instance        = USARTX;
   
-  UartHandle.Init.BaudRate   = 921600;//115200;
+  UartHandle.Init.BaudRate   = 9600;//115200;
   UartHandle.Init.WordLength = UART_WORDLENGTH_8B;
   UartHandle.Init.StopBits   = UART_STOPBITS_1;
   UartHandle.Init.Parity     = UART_PARITY_NONE;
@@ -147,7 +151,7 @@ void vcom_Send( char *format, ... )
   }
   RESTORE_PRIMASK();
   
-  HAL_NVIC_SetPendingIRQ(USARTX_IRQn);
+ //HAL_NVIC_SetPendingIRQ(USARTX_IRQn);
     
   va_end(args);
 }
@@ -166,9 +170,9 @@ void vcom_Print( void)
     
     RESTORE_PRIMASK();
     
-    HAL_UART_Transmit(&UartHandle,(uint8_t *) CurChar, 1,200);    
+  //  HAL_UART_Transmit(&UartHandle,(uint8_t *) CurChar, 1,200);    
   }
-  HAL_NVIC_ClearPendingIRQ(USARTX_IRQn);
+ // HAL_NVIC_ClearPendingIRQ(USARTX_IRQn);
 }
 
 void vcom_Send_Lp( char *format, ... )

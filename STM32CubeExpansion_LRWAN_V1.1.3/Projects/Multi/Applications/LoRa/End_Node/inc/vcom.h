@@ -77,6 +77,7 @@ Maintainer: Miguel Luis and Gregory Cristian
 * @param  None
 * @return None
 */
+void 	Transmit(uint8_t * pointer); 
 void vcom_Init(void);
 
    /** 

@@ -17,7 +17,6 @@
 .\sx1272mb2das\region.o: ..\..\..\..\..\..\..\Drivers\CMSIS\Include\cmsis_armcc.h
 .\sx1272mb2das\region.o: ..\..\..\..\..\..\..\Drivers\CMSIS\Include\core_cmFunc.h
 .\sx1272mb2das\region.o: ..\..\..\..\..\..\..\Drivers\CMSIS\Device\ST\STM32L0xx\Include\system_stm32l0xx.h
-.\sx1272mb2das\region.o: ..\..\..\..\..\..\..\Drivers\STM32L0xx_HAL_Driver\Inc\stm32l0xx_hal.h
 .\sx1272mb2das\region.o: ..\..\..\..\..\..\..\Drivers\STM32L0xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h
 .\sx1272mb2das\region.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\sx1272mb2das\region.o: ..\..\..\..\..\..\..\Drivers\STM32L0xx_HAL_Driver\Inc\stm32l0xx_hal_rcc_ex.h
@@ -48,5 +47,4 @@
 .\sx1272mb2das\region.o: ..\..\inc\debug.h
 .\sx1272mb2das\region.o: ..\..\inc\vcom.h
 .\sx1272mb2das\region.o: ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\Region.h
-.\sx1272mb2das\region.o: ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\RegionEU868.h
 .\sx1272mb2das\region.o: ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\RegionIN865.h

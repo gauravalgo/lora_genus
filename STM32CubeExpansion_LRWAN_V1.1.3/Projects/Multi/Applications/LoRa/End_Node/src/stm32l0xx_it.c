@@ -202,17 +202,17 @@ void SysTick_Handler(void)
 {
 }*/
 
-void USART2_IRQHandler( void )
+/*void USART2_IRQHandler( void )
 {
    vcom_Print( );
 	
 	
 	HW_UART_Modem_IRQHandler(&UartHandle);
 	//HAL_UART_IRQHandler(&UartHandle);
-}
+}*/
 void USART1_IRQHandler( void )
 {
-   vcom_Print( );
+  // vcom_Print( );
 	
 	
 	HW_UART_Modem_IRQHandler(&UartHandle);

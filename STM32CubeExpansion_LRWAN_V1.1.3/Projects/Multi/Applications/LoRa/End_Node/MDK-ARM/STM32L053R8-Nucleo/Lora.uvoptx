@@ -281,58 +281,6 @@
         <IsCurrentTarget>1</IsCurrentTarget>
       </OPTFL>
       <CpuCode>18</CpuCode>
-      <Books>
-        <Book>
-          <Number>0</Number>
-          <Title>User Manual (STM32L053-Discovery)</Title>
-          <Path>C:\Keil_v5\ARM\PACK\Keil\STM32L0xx_DFP\1.6.0\Boards\ST\STM32L053-Discovery\Documents\DM00118944.pdf</Path>
-        </Book>
-        <Book>
-          <Number>1</Number>
-          <Title>Data Brief (STM32L053-Discovery)</Title>
-          <Path>C:\Keil_v5\ARM\PACK\Keil\STM32L0xx_DFP\1.6.0\Boards\ST\STM32L053-Discovery\Documents\DM00122138.pdf</Path>
-        </Book>
-        <Book>
-          <Number>2</Number>
-          <Title>Schematics (STM32L053-Discovery)</Title>
-          <Path>C:\Keil_v5\ARM\PACK\Keil\STM32L0xx_DFP\1.6.0\Boards\ST\STM32L053-Discovery\Documents\MB1143.pdf</Path>
-        </Book>
-        <Book>
-          <Number>3</Number>
-          <Title>User Manual (NUCLEO-L053R8)</Title>
-          <Path>C:\Keil_v5\ARM\PACK\Keil\STM32NUCLEO_BSP\1.6.0\Documents\DM00105823.pdf</Path>
-        </Book>
-        <Book>
-          <Number>4</Number>
-          <Title>Overview (NUCLEO-L053R8)</Title>
-          <Path>C:\Keil_v5\ARM\PACK\Keil\STM32NUCLEO_BSP\1.6.0\Documents\DM00105918.pdf</Path>
-        </Book>
-        <Book>
-          <Number>5</Number>
-          <Title>Getting started (NUCLEO-L053R8)</Title>
-          <Path>C:\Keil_v5\ARM\PACK\Keil\STM32NUCLEO_BSP\1.6.0\Documents\DM00105928.pdf</Path>
-        </Book>
-        <Book>
-          <Number>6</Number>
-          <Title>Schematics (NUCLEO-L053R8)</Title>
-          <Path>C:\Keil_v5\ARM\PACK\Keil\STM32NUCLEO_BSP\1.6.0\Documents\MB1136.pdf</Path>
-        </Book>
-        <Book>
-          <Number>7</Number>
-          <Title>Quick Start Guide (NUCLEO-L053R8)</Title>
-          <Path>C:\Keil_v5\ARM\PACK\Keil\STM32NUCLEO_BSP\1.6.0\Documents\STM32L053-NUCLEO_QSG.pdf</Path>
-        </Book>
-        <Book>
-          <Number>8</Number>
-          <Title>STM32 Nucleo board (NUCLEO-L053R8)</Title>
-          <Path>http://www.st.com/web/catalog/tools/FM116/SC959/SS1532/LN1847/PF260001</Path>
-        </Book>
-        <Book>
-          <Number>9</Number>
-          <Title>STM32L053-Discovery Web Page (STM32L053-Discovery)</Title>
-          <Path>http://www.st.com/web/catalog/tools/FM116/SC959/SS1532/LN1848/PF260319</Path>
-        </Book>
-      </Books>
       <DebugOpt>
         <uSim>0</uSim>
         <uTrg>1</uTrg>
@@ -373,12 +321,12 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>ST-LINKIII-KEIL_SWO</Key>
-          <Name>-U066BFF525257775087153336 -I0 -O2254 -S0 -C0 -A0 -N00("ARM CoreSight SW-DP") -D00(0BC11477) -L00(0) -TO18 -TC10000000 -TP21 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -FO7 -FD20000000 -FC1000 -FN1 -FF0STM32L0xx_64.FLM -FS08000000 -FL010000 -FP0($$Device:STM32L053R8$Flash/STM32L0xx_64.FLM)</Name>
+          <Name>-U066BFF525257775087153336 -I0 -O2254 -S0 -C0 -A0 -N00("ARM CoreSight SW-DP") -D00(0BC11477) -L00(0) -TO18 -TC10000000 -TP21 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -FO7 -FD20000000 -FC1000 -FN1 -FF0STM32L0xx_64.FLM -FS08000000 -FL010000 -FP0($$Device:STM32L053R8Tx$CMSIS\Flash\STM32L0xx_64.FLM)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
           <Key>UL2CM3</Key>
-          <Name>UL2CM3(-S0 -C0 -P0 ) -FN1 -FC1000 -FD20000000 -FF0STM32L0xx_64 -FL010000 -FS08000000 -FP0($$Device:STM32L053R8Tx$Flash/STM32L0xx_64.FLM)</Name>
+          <Name>UL2CM3(-S0 -C0 -P0 ) -FN1 -FC1000 -FD20000000 -FF0STM32L0xx_64 -FL010000 -FS08000000 -FP0($$Device:STM32L053R8Tx$CMSIS\Flash\STM32L0xx_64.FLM)</Name>
         </SetRegEntry>
       </TargetDriverDllRegistry>
       <Breakpoint/>
@@ -424,6 +372,12 @@
       <pszMrulep></pszMrulep>
       <pSingCmdsp></pSingCmdsp>
       <pMultCmdsp></pMultCmdsp>
+      <DebugDescription>
+        <Enable>1</Enable>
+        <EnableLog>0</EnableLog>
+        <Protocol>2</Protocol>
+        <DbgClock>10000000</DbgClock>
+      </DebugDescription>
     </TargetOption>
   </Target>
 

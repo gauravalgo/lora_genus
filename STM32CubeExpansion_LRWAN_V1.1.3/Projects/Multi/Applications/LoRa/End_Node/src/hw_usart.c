@@ -51,8 +51,8 @@
 
 /*private variables*/
 static struct {
-  char buffTx[256];                         /* structure have to be simplified*/
-  char buffRx[256];
+  char buffTx[255];                         /* structure have to be simplified*/
+  char buffRx[255];
   //int rx_idx_free;
   //int rx_idx_toread;
   HW_LockTypeDef Lock;

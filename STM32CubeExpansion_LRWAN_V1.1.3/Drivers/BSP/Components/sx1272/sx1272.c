@@ -1667,7 +1667,7 @@ void SX1272OnDio3Irq( void )
             {
                 RadioEvents->CadDone( false );
             }
-        } ldl
+        } 
         break;
     default:
         break;

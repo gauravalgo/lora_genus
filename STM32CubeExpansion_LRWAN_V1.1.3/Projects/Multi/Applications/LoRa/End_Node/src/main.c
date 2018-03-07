@@ -52,6 +52,7 @@
 #include "timeServer.h"
 #include "vcom.h"
 #include "version.h"
+#include "nistha.h"
 typedef enum
 {
   ATCTL_RET_TIMEOUT = -3,         /* RX data timeout */
@@ -74,7 +75,7 @@ typedef enum
 }atctl_ret_t,ATEerror_t;
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
-#define DATA_RX_MAX_BUFF_SIZE    300 
+#define DATA_RX_MAX_BUFF_SIZE    255
 /*!
  * CAYENNE_LPP is myDevices Application server.
  */
@@ -88,7 +89,7 @@ typedef enum
 /*!
  * Defines the application data transmission duty cycle. 5s, value in [ms].
  */
-#define APP_TX_DUTYCYCLE                            10000
+#define APP_TX_DUTYCYCLE                            100000
 /*!
  * LoRaWAN Adaptive Data Rate
  * @note Please note that when ADR is enabled the end-device should be static
@@ -123,14 +124,16 @@ typedef enum
 /*!
  * User application data
  */
+#define  CAYENNE_LPP 1
 static uint8_t AppDataBuff[LORAWAN_APP_DATA_BUFF_SIZE];
-static int8_t transmit_buff_size =0;
+__IO uint8_t transmit_buff_size =0;
+__IO uint8_t  ResponseComplete = 0;
 /*!
  * User application data structure
  */
  static uint8_t response[DATA_RX_MAX_BUFF_SIZE];  
- static uint8_t aRxBuffer[5];  /* Buffer used for Rx input character */   
-static lora_AppData_t AppData={ response,  255 ,0 };
+ static uint8_t aRxBuffer[DATA_RX_MAX_BUFF_SIZE];  /* Buffer used for Rx input character */   
+static lora_AppData_t AppData;
 /* Private macro -------------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 
@@ -166,7 +169,8 @@ static LoRaMainCallback_t LoRaMainCallbacks ={ HW_GetBatteryLevel,
  * Specifies the state of the application LED
  */
 static uint8_t AppLedStateOn = RESET;
-                                             
+static   uint8_t RxBuffer[100];
+	static   uint8_t RxBufferSize=0;																						 
 static TimerEvent_t TxTimer;
 
 #ifdef USE_B_L072Z_LRWAN1
@@ -203,7 +207,7 @@ int main( void )
   SystemClock_Config( );
   
   /* Configure the debug mode*/
- // DBG_Init( );
+  DBG_Init( );
   
   /* Configure the hardware*/
   HW_Init( );
@@ -222,14 +226,18 @@ int main( void )
   LORA_Join( );
   
   LoraStartTx(TX_ON_TIMER) ;
-	uint8_t aTxStartMessage[] = "\r\nmain\r\n";
-		HAL_UART_Transmit_IT(&UartHandle, (uint8_t *)aTxStartMessage, sizeof(aTxStartMessage));
-  at_cmd_receive_async_event();
+	//uint8_t aTxStartMessage[] = "\r\nmain\r\n";
+		//HAL_UART_Transmit_IT(&UartHandle, (uint8_t *)aTxStartMessage, sizeof(aTxStartMessage));
+ 
 				
   while( 1 )
   {
-    
+   // HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_8); //Toggle the state of pin PC9
+   // HAL_Delay(10000);	
+		if(ResponseComplete)
+		at_cmd_receive_async_event();
 		DISABLE_IRQ( );
+		
     /* if an interrupt has occurred after DISABLE_IRQ, it is kept pending 
      * and cortex will not enter low power anyway  */
 
@@ -250,65 +258,85 @@ static void LORA_HasJoined( void )
 #endif
   LORA_RequestClass( LORAWAN_DEFAULT_CLASS );
 }
-static ATEerror_t at_cmd_receive_async_event(void)
+  static ATEerror_t at_cmd_receive_async_event(void)
 {
-uint8_t  ResponseComplete = 0;
-int8_t i = 0;
+
+uint8_t i = 0;
+uint8_t length=255;
 int8_t charnumber = 0;
 char *ptrChr;
 ATEerror_t RetCode;
 uint8_t NoReturnCode =1;   /*too discriminate the Get reurn code from return value*/
- char buf [10]; 
+ //char buf [10]; 
   /*cleanup the response buffer*/
-  memset(response, 0x00, DATA_RX_MAX_BUFF_SIZE); 
+  //memset(response, 0x00, DATA_RX_MAX_BUFF_SIZE); 
+	//struct dummy *pointer=(struct dummy *)malloc(sizeof(struct dummy));
 	int j=0;
+	 //PRINTF(" code in"); 
   /*UART peripheral in reception process for response returned by slave*/  
   if(HAL_UART_Receive_IT(&UartHandle, (uint8_t *)aRxBuffer,1) != HAL_OK)
   {
-   while (1);
+ //  uint8_t aTxStartMessage[] = "\r\nerror1\r\n";
+	//	HAL_UART_Transmit_IT(&UartHandle, (uint8_t *)aTxStartMessage, sizeof(aTxStartMessage));	
   } 
-  
-  while (!ResponseComplete)
+  //BACKUP_PRIMASK();
+ // DISABLE_IRQ();
+  while (ResponseComplete!=0)
   {  
-   
+  // PRINTF(" code in"); 
 	
 		while (HW_UART_Modem_IsNewCharReceived() == RESET);   
-    
+   
     /*process the response*/    
     response[i] = HW_UART_Modem_GetNewChar();
-     sprintf (buf, "%d\n", i);
-		HAL_UART_Transmit_IT(&UartHandle, (uint8_t *)buf, 3);   
-		HAL_UART_Transmit_IT(&UartHandle, (uint8_t *)&response[i], 1);     
+	   BACKUP_PRIMASK();
+  DISABLE_IRQ();
+    if(i==1)
+		{
+		//	pointer=(struct dummy *)response;
+			//PRINTF("length=%2X\n",response[i]);
+			length=response[i];
+		}			
+//	//	sprintf (buf, "%d\n", i);
+//	//	HAL_UART_Transmit_IT(&UartHandle, (uint8_t *)buf, 3);   
+//	//	HAL_UART_Transmit_IT(&UartHandle, (uint8_t *)&response[i], 1);     
+		//PRINTF("character=%2X\n\r",response[i]);
     transmit_buff_size=i;
-		/*wait up to carriage return OR the line feed marker*/
-    if (/*(response[i] =='\r') || */response[i] == '\n')       
+//		/*wait up to carriage return OR the line feed marker*/
+		//PRINTF(" code in"); 
+    if (i==length)       
     {
-      if (i!= 0)      /*trap the asynchronous event*/
-      {
+		
         /*first statement to get back the return value*/
-        response[i] = '\0';
+       // response[i+1] = '\0';
+				ResponseComplete=0;
         break;
-      }
-      
+     
+//      
     }   
     else
     {
       if (i ==  (DATA_RX_MAX_BUFF_SIZE-1)) /* frame overflow */           
       {  
-        i = 0; 
+       i = 0; 
       } 
     }
       i++;
-      HAL_UART_Receive_IT(&UartHandle, (uint8_t *)aRxBuffer,1) ;
-      charnumber++;
+		 charnumber++;
+		RESTORE_PRIMASK(); 
+      if(HAL_UART_Receive_IT(&UartHandle, (uint8_t *)aRxBuffer,1)!=HAL_OK )
+			{
+			//	uint8_t aTxStartMessage[] = "\r\nerror2\r\n";
+	//	HAL_UART_Transmit_IT(&UartHandle, (uint8_t *)aTxStartMessage, sizeof(aTxStartMessage));	
+			}
+     
   } 
-   
+//  // free(pointer);
 	UartHandle.gState = HAL_UART_STATE_READY;
       UartHandle.RxState = HAL_UART_STATE_READY;        /*to be checked since was validated with previous */
-      
-	return ( RetCode);                            /*version of HAL .. there was not Rx field state*/
-}
+     	return ( RetCode);                            /*version of HAL .. there was not Rx field state*/
 
+}
 static void Send( void )
 {
   /* USER CODE BEGIN 3 */
@@ -349,15 +377,29 @@ static void Send( void )
   pressure    = ( uint16_t )( sensor_data.pressure * 100 / 10 );  /* in hPa / 10 */
   humidity    = ( uint16_t )( sensor_data.humidity * 2 );        /* in %*2     */
   uint32_t i = 0;
-
+		if(HAL_UART_Transmit_IT(&UartHandle, (uint8_t *)RxBuffer, RxBufferSize)!=HAL_OK)
+	{
+	//	uint8_t aTxStartMessage[] = "\r\nerror\r\n";
+	//	HAL_UART_Transmit_IT(&UartHandle, (uint8_t *)aTxStartMessage, sizeof(aTxStartMessage));	
+	}
+//	Transmit(AppData->Buff[i]);
+	//PRINTF(" %02X", AppData->Buff[i]); 
+//} 
+ResponseComplete=1;
+	
+ BACKUP_PRIMASK();
+  DISABLE_IRQ();
   batteryLevel = HW_GetBatteryLevel( );                     /* 1 (very low) to 254 (fully charged) */
 
   AppData.Port = LPP_APP_PORT;
+	AppData.BuffSize=transmit_buff_size;
+
 while(i<transmit_buff_size)
 {
 	AppData.Buff[i]=response[i];
 	i++;
 }
+   RESTORE_PRIMASK();
 //  AppData.Buff[i++] = 1;//cchannel++;
 //  AppData.Buff[i++] = 2;//LPP_DATATYPE_BAROMETER;
 //  AppData.Buff[i++] = 3;//( pressure >> 8 ) & 0xFF;
@@ -434,72 +476,92 @@ while(i<transmit_buff_size)
 static void LORA_RxData( lora_AppData_t *AppData )
 {
   /* USER CODE BEGIN 4 */
-//  DBG_PRINTF("PACKET RECEIVED ON PORT %d\n\r", AppData->Port);
-
-  switch (AppData->Port)
-  {
-    case 3:
-    /*this port switches the class*/
-    if( AppData->BuffSize == 1 )
-    {
-      switch (  AppData->Buff[0] )
-      {
-        case 0:
-        {
-          LORA_RequestClass(CLASS_A);
-          break;
-        }
-        case 1:
-        {
-          LORA_RequestClass(CLASS_B);
-          break;
-        }
-        case 2:
-        {
-          LORA_RequestClass(CLASS_C);
-          break;
-        }
-        default:
-          break;
-      }
-    }
-    break;
-    case LORAWAN_APP_PORT:
-    if( AppData->BuffSize == 1 )
-    {
-      AppLedStateOn = AppData->Buff[0] & 0x01;
-      if ( AppLedStateOn == RESET )
-      {
-        PRINTF("LED OFF\n\r");
-        LED_Off( LED_BLUE ) ; 
-      }
-      else
-      {
-        PRINTF("LED ON\n\r");
-        LED_On( LED_BLUE ) ; 
-      }
-    }
-    break;
-  case LPP_APP_PORT:
-  {
-    AppLedStateOn= (AppData->Buff[2] == 100) ?  0x01 : 0x00;
-    if ( AppLedStateOn == RESET )
-    {
-      PRINTF("LED OFF\n\r");
-      LED_Off( LED_BLUE ) ; 
+//PRINTF("PACKET RECEIVED ON PORT %d\n\r", AppData->Port);
+	//PRINTF(" %02X", &UartHandle);
+	//uint8_t aTxStartMessage[] = "\r\nyes\r\n";
+	//	HAL_UART_Transmit_IT(&UartHandle, (uint8_t *)aTxStartMessage, sizeof(aTxStartMessage));	
+	for(int i=0; i<AppData->BuffSize ; i++) 
+{
+	//PRINTF("PACKET RECEIVED %d",AppData->BuffSize);
+	if(HAL_UART_Transmit_IT(&UartHandle, (uint8_t *)&AppData->Buff[i], 1)!=HAL_OK)
+	{
+	//	uint8_t aTxStartMessage[] = "\r\nerror\r\n";
+	//	HAL_UART_Transmit_IT(&UartHandle, (uint8_t *)aTxStartMessage, sizeof(aTxStartMessage));	
+	}
+	 RxBuffer[i]=AppData->Buff[i];
+RxBufferSize=AppData->BuffSize;		
+//	Transmit(AppData->Buff[i]);
+	//PRINTF(" %02X", AppData->Buff[i]); 
+} 
+ResponseComplete=1;
+	//PRINTF("\n\r");
+ //at_cmd_receive_async_event();
+//HAL_UART_Transmit_IT(&UartHandle, (uint8_t *)AppData->Buff[i], AppData->BuffSize);
+ // switch (AppData->Port)
+ //{
+ //   case 3:
+    /*this port switches the cla    ss*/
+  //  if( AppData->BuffSize == 1 )
+  //  {
+  //    switch (  AppData->Buff[0] )
+   //   {
+   //     case 0:
+   //     {
+   //       LORA_RequestClass(CLASS_A);
+   //       break;
+   //     }
+   //     case 1:
+   //     {
+    //      LORA_RequestClass(CLASS_B);
+     //     break;
+    //    }
+     //   case 2:
+     //   {
+     //     LORA_RequestClass(CLASS_C);
+     //     break;
+    //    }
+    //    default:
+     //     break;
+    //  }
+    //}
+   // break;
+  //  case LORAWAN_APP_PORT:
+  //  if( AppData->BuffSize == 1 )
+  //  {
+  //    AppLedStateOn = AppData->Buff[0] & 0x01;
+  //    if ( AppLedStateOn == RESET )
+  //    {
+  //      PRINTF("LED OFF\n\r");
+  //      LED_Off( LED_BLUE ) ; 
+     // }
+    //  else
+    //  {
+    //    PRINTF("LED ON\n\r");
+   //     LED_On( LED_BLUE ) ; 
+   //   }
+  //  }
+  //  break;
+  //case LPP_APP_PORT:
+ // {
+ //   AppLedStateOn= (AppData->Buff[2] == 100) ?  0x01 : 0x00;
+ //   if ( AppLedStateOn == RESET )
+ //   {
+ //     PRINTF("LED OFF\n\r");
+  //    LED_Off( LED_BLUE ) ; 
       
-    }
-    else
-    {
-      PRINTF("LED ON\n\r");
-      LED_On( LED_BLUE ) ; 
-    }
-    break;
-  }
-  default:
-    break;
-  }
+  //  }
+   // else
+   // {
+   //   PRINTF("LED ON\n\r");
+  //    LED_On( LED_BLUE ) ; 
+  //  }
+  //  break;
+ // }
+ // default:
+//    break;
+ // }
   /* USER CODE END 4 */
+	
 }
 
 static void OnTxTimerEvent( void )

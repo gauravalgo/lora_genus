@@ -908,7 +908,7 @@ typedef struct sMcpsIndication
     /*!
      * Pointer to the received data stream
      */
-    uint8_t *Buffer;
+    uint8_t Buffer[255];
     /*!
      * Size of the received data stream
      */
